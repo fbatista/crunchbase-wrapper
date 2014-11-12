@@ -16,22 +16,30 @@ module Crunchbase
       @mash.send(method_sym, *arguments)
     end
 
+    def load_details
+      if properties
+        return self
+      else
+        Product.find(path.sub("product/", ''))
+      end
+    end
+
     def self.all(options = {})
-      opts = options.merge({user_key: Brainspace.config.user_key})
-      response = Faraday.get("#{Brainspace.config.host}/#{Brainspace.config.api_version_prefix}/products", opts)
+      opts = options.merge({user_key: Crunchbase.config.user_key})
+      response = Faraday.get("#{Crunchbase.config.host}/#{Crunchbase.config.api_version_prefix}/products", opts)
 
       raise "Error" if response.status != 200
 
       # ignore paging
       raw = Hashie::Mash.new(JSON.parse(response.body))
       collection = raw.data.items
-      collections.map { |item| new(item, raw.metadata) }
+      collection.map { |item| new(item, raw.metadata) }
     rescue
       []
     end
 
     def self.find(permalink)
-      response = Faraday.get("#{Brainspace.config.host}/#{Brainspace.config.api_version_prefix}/product/#{permalink}", user_key: Brainspace.config.user_key)
+      response = Faraday.get("#{Crunchbase.config.host}/#{Crunchbase.config.api_version_prefix}/product/#{permalink}", user_key: Crunchbase.config.user_key)
 
       raise "Error" if response.status != 200
 

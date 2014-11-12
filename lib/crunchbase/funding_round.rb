@@ -17,7 +17,7 @@ module Crunchbase
     end
 
     def self.find(uuid)
-      response = Faraday.get("#{Brainspace.config.host}/#{Brainspace.config.api_version_prefix}/funding-round/#{uuid}", user_key: Brainspace.config.user_key)
+      response = Faraday.get("#{Crunchbase.config.host}/#{Crunchbase.config.api_version_prefix}/funding-round/#{uuid}", user_key: Crunchbase.config.user_key)
 
       raise "Error" if response.status != 200
 

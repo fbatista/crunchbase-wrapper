@@ -17,15 +17,15 @@ module Crunchbase
     end
 
     def self.all(options = {})
-      opts = options.merge({user_key: Brainspace.config.user_key})
-      response = Faraday.get("#{Brainspace.config.host}/#{Brainspace.config.api_version_prefix}/locations", opts)
+      opts = options.merge({user_key: Crunchbase.config.user_key})
+      response = Faraday.get("#{Crunchbase.config.host}/#{Crunchbase.config.api_version_prefix}/locations", opts)
 
       raise "Error" if response.status != 200
 
       # ignore paging
       raw = Hashie::Mash.new(JSON.parse(response.body))
       collection = raw.data.items
-      collections.map { |item| new(item, raw.metadata) }
+      collection.map { |item| new(item, raw.metadata) }
     rescue
       []
     end
