@@ -15,7 +15,7 @@ require_relative "crunchbase/acquisition"
 
 module Crunchbase
   CONFIG = Hashie::Mash.new({
-    host: "http://api.crunchbase.com",
+    host: "https://api.crunchbase.com",
     api_version_prefix: "v/2",
     user_key: nil
   })
